@@ -274,6 +274,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'SysHackStore',
   data() {
