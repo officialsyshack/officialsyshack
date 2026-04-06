@@ -151,15 +151,6 @@
                 </div>
                 <span v-if="payMethod === 'paypal'" class="pay-check neon-text">✓</span>
               </button>
-
-              <button class="pay-option" :class="{ active: payMethod === 'wise' }" @click="payMethod = 'wise'">
-                <span class="pay-icon">💸</span>
-                <div class="pay-info">
-                  <div class="pay-name">Wise</div>
-                  <div class="pay-detail mono">Send to: officialsyshack@gmail.com</div>
-                </div>
-                <span v-if="payMethod === 'wise'" class="pay-check neon-text">✓</span>
-              </button>
             </div>
 
             <button class="btn-next" :disabled="!payMethod" @click="step = 2">
@@ -174,13 +165,13 @@
             <h2 class="modal-title bebas">Send <span class="neon-text">${{ selectedProduct && selectedProduct.price }}</span> Now</h2>
 
             <!-- PayPal block -->
-            <div v-if="payMethod === 'paypal'" class="instructions-box">
+            <div class="instructions-box">
               <div class="instr-header mono">🅿️ PayPal — Step by step</div>
               <div class="instr-steps">
                 <div class="instr-step"><span class="instr-num">1</span><span>Open PayPal and click <strong>"Send Money"</strong></span></div>
                 <div class="instr-step"><span class="instr-num">2</span><span>Send exactly <strong class="neon-text">${{ selectedProduct && selectedProduct.price }} USD</strong> to this email:</span></div>
               </div>
-              <div class="copy-box" @click="copy('nerishmelissa3@gmail.com')">
+              <div class="copy-box" @click="copy('paypal')">
                 <div class="copy-left">
                   <div class="copy-label mono">PayPal Email</div>
                   <div class="copy-value mono">nerishmelissa3@gmail.com</div>
@@ -189,26 +180,6 @@
               </div>
               <div class="instr-steps">
                 <div class="instr-step"><span class="instr-num">3</span><span>In the <strong>note/message</strong> field write: <em>SysHack – {{ selectedProduct && selectedProduct.name }}</em></span></div>
-                <div class="instr-step"><span class="instr-num">4</span><span>Take a <strong>screenshot</strong> of the payment confirmation screen</span></div>
-              </div>
-            </div>
-
-            <!-- Wise block -->
-            <div v-if="payMethod === 'wise'" class="instructions-box">
-              <div class="instr-header mono">💸 Wise — Step by step</div>
-              <div class="instr-steps">
-                <div class="instr-step"><span class="instr-num">1</span><span>Open Wise and click <strong>"Send money"</strong></span></div>
-                <div class="instr-step"><span class="instr-num">2</span><span>Send exactly <strong class="neon-text">${{ selectedProduct && selectedProduct.price }} USD</strong> to this email:</span></div>
-              </div>
-              <div class="copy-box" @click="copy('wise')">
-                <div class="copy-left">
-                  <div class="copy-label mono">Wise Email</div>
-                  <div class="copy-value mono">officialsyshack@gmail.com</div>
-                </div>
-                <div class="copy-btn mono">{{ copied === 'wise' ? '✓ Copied' : 'Copy' }}</div>
-              </div>
-              <div class="instr-steps">
-                <div class="instr-step"><span class="instr-num">3</span><span>In the <strong>reference</strong> field write: <em>SysHack – {{ selectedProduct && selectedProduct.name }}</em></span></div>
                 <div class="instr-step"><span class="instr-num">4</span><span>Take a <strong>screenshot</strong> of the payment confirmation screen</span></div>
               </div>
             </div>
@@ -257,7 +228,7 @@
             </div>
 
             <a
-              :href="`mailto:officialsyshack@gmail.com?subject=SysHack%20Purchase%20%E2%80%93%20${encodeURIComponent(selectedProduct && selectedProduct.name)}&body=Hi%20SysHack!%0A%0AI%20just%20paid%20%24${selectedProduct && selectedProduct.price}%20via%20${payMethod === 'paypal' ? 'PayPal' : 'Wise'}%20for%3A%20${encodeURIComponent(selectedProduct && selectedProduct.name)}.%0A%0APayment%20screenshot%20attached.%0A%0ASend%20my%20file%20to%3A%20%5BYOUR%20EMAIL%5D%0A%0AThanks!`"
+              :href="`mailto:officialsyshack@gmail.com?subject=SysHack%20Purchase%20%E2%80%93%20${encodeURIComponent(selectedProduct && selectedProduct.name)}&body=Hi%20SysHack!%0A%0AI%20just%20paid%20%24${selectedProduct && selectedProduct.price}%20via%20PayPal%20for%3A%20${encodeURIComponent(selectedProduct && selectedProduct.name)}.%0A%0APayment%20screenshot%20attached.%0A%0ASend%20my%20file%20to%3A%20%5BYOUR%20EMAIL%5D%0A%0AThanks!`"
               class="btn-email-open"
             >
               📧 Open Email App
@@ -332,8 +303,8 @@ export default {
 
       steps: [
         { icon: '🛒', title: 'Pick a Toolkit', desc: 'Choose the script that fits your need.' },
-        { icon: '💳', title: 'Pay via PayPal or Wise', desc: 'Send payment — takes under 2 minutes.' },
-        { icon: '📧', title: 'Email Your Screenshot', desc: 'Send proof + your email to rewindgmail.com' },
+        { icon: '💳', title: 'Pay via PayPal', desc: 'Send payment — takes under 2 minutes.' },
+        { icon: '📧', title: 'Email Your Screenshot', desc: 'Send proof + your email to officialsyshack@gmail.com' },
         { icon: '✅', title: 'Receive Your File', desc: 'Get your toolkit download within 24 hours.' },
       ],
 
@@ -362,8 +333,7 @@ export default {
     copy(key) {
       const map = {
         paypal: 'nerishmelissa3@gmail.com',
-        wise: 'rewindgmail.com',
-        gmail: 'rewindgmail.com',
+        gmail: 'officialsyshack@gmail.com',
       };
       navigator.clipboard.writeText(map[key]).catch(() => {});
       this.copied = key;
