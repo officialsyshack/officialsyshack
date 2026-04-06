@@ -203,7 +203,7 @@
               <div class="copy-box" @click="copy('wise')">
                 <div class="copy-left">
                   <div class="copy-label mono">Wise Email</div>
-                  <div class="copy-value mono">rewindgmail.com</div>
+                  <div class="copy-value mono">officialsyshack@gmail.com</div>
                 </div>
                 <div class="copy-btn mono">{{ copied === 'wise' ? '✓ Copied' : 'Copy' }}</div>
               </div>
@@ -231,7 +231,7 @@
               <div class="copy-box" @click="copy('gmail')">
                 <div class="copy-left">
                   <div class="copy-label mono">📧 Send Email To</div>
-                  <div class="copy-value mono">rewindgmail.com</div>
+                  <div class="copy-value mono">officialsyshack@gmail.com</div>
                 </div>
                 <div class="copy-btn mono">{{ copied === 'gmail' ? '✓ Copied' : 'Copy' }}</div>
               </div>
@@ -257,7 +257,7 @@
             </div>
 
             <a
-              :href="`mailto:rewindgmail.com?subject=SysHack%20Purchase%20%E2%80%93%20${encodeURIComponent(selectedProduct && selectedProduct.name)}&body=Hi%20SysHack!%0A%0AI%20just%20paid%20%24${selectedProduct && selectedProduct.price}%20via%20${payMethod === 'paypal' ? 'PayPal' : 'Wise'}%20for%3A%20${encodeURIComponent(selectedProduct && selectedProduct.name)}.%0A%0APayment%20screenshot%20attached.%0A%0ASend%20my%20file%20to%3A%20%5BYOUR%20EMAIL%5D%0A%0AThanks!`"
+              :href="`mailto:officialsyshack@gmail.com?subject=SysHack%20Purchase%20%E2%80%93%20${encodeURIComponent(selectedProduct && selectedProduct.name)}&body=Hi%20SysHack!%0A%0AI%20just%20paid%20%24${selectedProduct && selectedProduct.price}%20via%20${payMethod === 'paypal' ? 'PayPal' : 'Wise'}%20for%3A%20${encodeURIComponent(selectedProduct && selectedProduct.name)}.%0A%0APayment%20screenshot%20attached.%0A%0ASend%20my%20file%20to%3A%20%5BYOUR%20EMAIL%5D%0A%0AThanks!`"
               class="btn-email-open"
             >
               📧 Open Email App
