@@ -1,6 +1,8 @@
 import { createApp } from 'vue'
 import './style.css'
 import App from './App.vue'
-import { Analytics } from "@vercel/analytics/vue"
+import { inject } from '@vercel/analytics'
+
+inject({ mode: 'production' })
 
 createApp(App).mount('#app')
