@@ -432,8 +432,9 @@ fi
 
 # Install Audio (PipeWire)
 echo "[3/5] Installing PipeWire audio..."
-sudo pacman -S --needed --noconfirm pipewire pipewire-audio pipewire-alsa pipewire-pulse wireplumber
-echo "✓ PipeWire audio ready (auto-starts with your desktop session)"
+sudo pacman -S --noconfirm pipewire pipewire-alsa pipewire-pulse wireplumber
+systemctl --user enable pipewire pipewire-pulse wireplumber
+echo "✓ PipeWire audio ready"
 
 # Network tools
 echo "[4/5] Installing network tools..."
@@ -516,56 +517,54 @@ echo "✅ Post-install complete! You're ready to go."`,
           tags: ['Performance', 'Boot', 'RAM', 'Services'],
           script: `#!/bin/bash
 # SysHack — essentials.sh
-# Safe post-install tuning for Arch Linux
-set -euo pipefail
+# System optimizations: boot speed, services, memory tuning
+# Usage: bash essentials.sh
+
+set -e
 echo "⚡ SysHack System Essentials"
 echo "=============================="
-if [[ $EUID -eq 0 ]]; then
-  echo "Please run this script as a normal user with sudo access, not as root."
-  exit 1
-fi
-# Disable optional services only if installed
-echo "[1/5] Cleaning up optional services..."
+
+# Disable unused services
+echo "[1/5] Cleaning up unused services..."
 SERVICES=(bluetooth cups avahi-daemon ModemManager)
 for svc in "\${SERVICES[@]}"; do
-  if systemctl list-unit-files | grep -q "^${svc}\.service"; then
-    if systemctl is-enabled "${svc}.service" &>/dev/null; then
-      sudo systemctl disable --now "${svc}.service"
-      echo "  ✓ Disabled: $svc"
-    fi
+  if systemctl is-enabled "$svc" &>/dev/null; then
+    sudo systemctl disable --now "$svc"
+    echo "  ✓ Disabled: $svc"
   fi
 done
-# Bootloader check
-echo "[2/5] Adjusting boot menu timeout..."
-if [[ -f /etc/default/grub ]] && command -v grub-mkconfig &>/dev/null; then
-  sudo sed -i 's/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=2/' /etc/default/grub
-  sudo grub-mkconfig -o /boot/grub/grub.cfg
-  echo "  ✓ GRUB timeout set to 2s"
-else
-  echo "  • GRUB not detected, skipping bootloader changes"
-fi
-# Swappiness
-echo "[3/5] Tuning memory..."
-echo "vm.swappiness=10" | sudo tee /etc/sysctl.d/99-syshack.conf >/dev/null
-sudo sysctl --system >/dev/null
+
+# Boot speed — reduce GRUB timeout
+echo "[2/5] Reducing GRUB timeout..."
+sudo sed -i 's/^GRUB_TIMEOUT=.*/GRUB_TIMEOUT=2/' /etc/default/grub
+sudo grub-mkconfig -o /boot/grub/grub.cfg
+echo "  ✓ GRUB timeout set to 2s"
+
+# Memory / swap tuning
+echo "[3/5] Tuning memory (swappiness)..."
+echo "vm.swappiness=10" | sudo tee /etc/sysctl.d/99-syshack.conf
+sudo sysctl -p /etc/sysctl.d/99-syshack.conf
 echo "  ✓ Swappiness set to 10"
-# zram
+
+# Enable zram (compressed RAM swap)
 echo "[4/5] Enabling zram..."
-sudo pacman -S --needed --noconfirm zram-generator
-sudo tee /etc/systemd/zram-generator.conf >/dev/null <<EOF
+sudo pacman -S --noconfirm zram-generator
+cat <<EOF | sudo tee /etc/systemd/zram-generator.conf
 [zram0]
 zram-size = ram / 2
 compression-algorithm = zstd
 EOF
 sudo systemctl daemon-reload
-sudo systemctl start systemd-zram-setup@zram0.service
+sudo systemctl start systemd-zram-setup@zram0
 echo "  ✓ zram enabled"
-# Clean cache
+
+# Clean package cache
 echo "[5/5] Cleaning package cache..."
 sudo pacman -Sc --noconfirm
 echo "  ✓ Cache cleaned"
+
 echo ""
-echo "✅ System tuning complete. Reboot recommended."`,
+echo "✅ System optimized! Reboot recommended."`,
         },
       ],
 
