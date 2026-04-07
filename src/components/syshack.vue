@@ -527,7 +527,7 @@ fi
 # Disable optional services only if installed
 echo "[1/5] Cleaning up optional services..."
 SERVICES=(bluetooth cups avahi-daemon ModemManager)
-for svc in "${SERVICES[@]}"; do
+for svc in "\${SERVICES[@]}"; do
   if systemctl list-unit-files | grep -q "^${svc}\.service"; then
     if systemctl is-enabled "${svc}.service" &>/dev/null; then
       sudo systemctl disable --now "${svc}.service"
